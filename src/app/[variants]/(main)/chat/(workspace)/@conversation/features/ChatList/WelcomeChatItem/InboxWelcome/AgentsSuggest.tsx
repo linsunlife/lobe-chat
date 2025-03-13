@@ -12,8 +12,8 @@ import useSWR from 'swr';
 import urlJoin from 'url-join';
 
 import { assistantService } from '@/services/assistant';
-import { useUserStore } from '@/store/user';
-import { userGeneralSettingsSelectors } from '@/store/user/selectors';
+import { useGlobalStore } from '@/store/global';
+import { globalGeneralSelectors } from '@/store/global/selectors';
 import { DiscoverAssistantItem } from '@/types/discover';
 
 const { Paragraph } = Typography;
@@ -60,7 +60,7 @@ const useStyles = createStyles(({ css, token, responsive }) => ({
 
 const AgentsSuggest = memo<{ mobile?: boolean }>(({ mobile }) => {
   const { t } = useTranslation('welcome');
-  const locale = useUserStore(userGeneralSettingsSelectors.currentLanguage);
+  const locale = useGlobalStore(globalGeneralSelectors.currentLanguage);
   const [sliceStart, setSliceStart] = useState(0);
 
   const { data: assistantList, isLoading } = useSWR(
@@ -105,7 +105,11 @@ const AgentsSuggest = memo<{ mobile?: boolean }>(({ mobile }) => {
           : assistantList
               .slice(sliceStart, sliceStart + agentLength)
               .map((item: DiscoverAssistantItem) => (
-                <Link href={urlJoin('/discover/assistant/', item.identifier)} key={item.identifier}>
+                <Link
+                  href={urlJoin('/discover/assistant/', item.identifier)}
+                  key={item.identifier}
+                  prefetch={false}
+                >
                   <Flexbox className={styles.card} gap={8} horizontal>
                     <Avatar avatar={item.meta.avatar} style={{ flex: 'none' }} />
                     <Flexbox gap={mobile ? 2 : 8} style={{ overflow: 'hidden', width: '100%' }}>
