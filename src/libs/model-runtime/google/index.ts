@@ -45,6 +45,11 @@ const modelsDisableInstuction = new Set([
   'gemini-2.0-flash-exp',
   'gemini-2.0-flash-exp-image-generation',
   'gemini-2.0-flash-preview-image-generation',
+  'gemma-3-1b-it',
+  'gemma-3-4b-it',
+  'gemma-3-12b-it',
+  'gemma-3-27b-it',
+  'gemma-3n-e4b-it',
 ]);
 
 export interface GoogleModelCard {
@@ -84,6 +89,7 @@ interface LobeGoogleAIParams {
 
 interface GoogleAIThinkingConfig {
   includeThoughts?: boolean;
+  thinkingBudget?: number;
 }
 
 export class LobeGoogleAI implements LobeRuntimeAI {
@@ -108,10 +114,20 @@ export class LobeGoogleAI implements LobeRuntimeAI {
   async chat(rawPayload: ChatStreamPayload, options?: ChatCompetitionOptions) {
     try {
       const payload = this.buildPayload(rawPayload);
-      const model = payload.model;
+      const { model, thinking } = payload;
 
       const thinkingConfig: GoogleAIThinkingConfig = {
-        includeThoughts: true,
+        includeThoughts:
+          (thinking?.type === 'enabled') || 
+          (!thinking && model && (model.includes('-2.5-') || model.includes('thinking'))) 
+            ? true
+            : undefined,
+        thinkingBudget:
+          thinking?.type === 'enabled'
+            ? Math.min(thinking.budget_tokens, 24_576)
+            : thinking?.type === 'disabled'
+              ? 0
+              : undefined,
       };
 
       const contents = await this.buildGoogleMessages(payload.messages);
@@ -125,8 +141,8 @@ export class LobeGoogleAI implements LobeRuntimeAI {
               // @ts-expect-error - Google SDK 0.24.0 doesn't have this property for now with
               response_modalities: modelsWithModalities.has(model) ? ['Text', 'Image'] : undefined,
               temperature: payload.temperature,
-              thinkingConfig,
               topP: payload.top_p,
+              ...(modelsDisableInstuction.has(model) || model.toLowerCase().includes('learnlm') ? {} : { thinkingConfig }),
             },
             model,
             // avoid wide sensitive words
