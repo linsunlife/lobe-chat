@@ -1,6 +1,5 @@
 import { IconAvatarProps, ModelIcon, ProviderIcon } from '@lobehub/icons';
-import { Avatar, Icon, Tag, Tooltip } from '@lobehub/ui';
-import { Typography } from 'antd';
+import { Avatar, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStyles, useResponsive } from 'antd-style';
 import {
   Infinity,
@@ -174,13 +173,23 @@ export const ModelItemRender = memo<ModelItemRenderProps>(({ showInfoTag = true,
       gap={32}
       horizontal
       justify={'space-between'}
-      style={{ overflow: 'hidden', position: 'relative', width: mobile ? '80vw' : 'auto' }}
+      style={{
+        minWidth: mobile ? '100%' : undefined,
+        overflow: 'hidden',
+        position: 'relative',
+        width: mobile ? '80vw' : 'auto',
+      }}
     >
-      <Flexbox align={'center'} gap={8} horizontal style={{ overflow: 'hidden' }}>
+      <Flexbox
+        align={'center'}
+        gap={8}
+        horizontal
+        style={{ flexShrink: 1, minWidth: 0, overflow: 'hidden' }}
+      >
         <ModelIcon model={model.id} size={20} />
-        <Typography.Text style={mobile ? { overflowX: 'auto', whiteSpace: 'nowrap' } : {}}>
+        <Text style={mobile ? { maxWidth: '60vw', overflowX: 'auto', whiteSpace: 'nowrap' } : {}}>
           {model.displayName || model.id}
-        </Typography.Text>
+        </Text>
       </Flexbox>
       {showInfoTag && <ModelInfoTags {...model} />}
     </Flexbox>
