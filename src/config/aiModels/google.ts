@@ -1,4 +1,5 @@
-import { AIChatModelCard } from '@/types/aiModel';
+import { ModelParamsSchema } from '@/libs/standard-parameters';
+import { AIChatModelCard, AIImageModelCard } from '@/types/aiModel';
 
 const googleChatModels: AIChatModelCard[] = [
   {
@@ -11,7 +12,8 @@ const googleChatModels: AIChatModelCard[] = [
     contextWindowTokens: 1_048_576 + 65_536,
     description:
       'Gemini 2.5 Pro 是 Google 最先进的思维模型，能够对代码、数学和STEM领域的复杂问题进行推理，以及使用长上下文分析大型数据集、代码库和文档。',
-    displayName: 'Gemini 2.5 Pro (Paid)',
+    displayName: 'Gemini 2.5 Pro',
+    enabled: true,
     id: 'gemini-2.5-pro',
     maxOutput: 65_536,
     pricing: {
@@ -71,30 +73,6 @@ const googleChatModels: AIChatModelCard[] = [
       output: 10, // prompts <= 200k tokens
     },
     releasedAt: '2025-05-06',
-    settings: {
-      searchImpl: 'params',
-      searchProvider: 'google',
-    },
-    type: 'chat',
-  },
-  {
-    abilities: {
-      functionCall: true,
-      reasoning: true,
-      search: true,
-      vision: true,
-    },
-    contextWindowTokens: 1_048_576 + 65_536,
-    description:
-      'Gemini 2.5 Pro Experimental 是 Google 最先进的思维模型，能够对代码、数学和STEM领域的复杂问题进行推理，以及使用长上下文分析大型数据集、代码库和文档。',
-    displayName: 'Gemini 2.5 Pro Experimental 03-25',
-    id: 'gemini-2.5-pro-exp-03-25',
-    maxOutput: 65_536,
-    pricing: {
-      input: 0,
-      output: 0,
-    },
-    releasedAt: '2025-03-25',
     settings: {
       searchImpl: 'params',
       searchProvider: 'google',
@@ -206,7 +184,7 @@ const googleChatModels: AIChatModelCard[] = [
       search: true,
       vision: true,
     },
-    contextWindowTokens: 65_536 + 65_536,
+    contextWindowTokens: 1_048_576 + 65_536,
     description:
       'Gemini 2.5 Flash-Lite Preview 是 Google 最小、性价比最高的模型，专为大规模使用而设计。',
     displayName: 'Gemini 2.5 Flash-Lite Preview 06-17',
@@ -495,6 +473,18 @@ const googleChatModels: AIChatModelCard[] = [
   },
   {
     contextWindowTokens: 2048 + 8192,
+    displayName: 'Gemma 3n E2B',
+    id: 'gemma-3n-e2b-it',
+    maxOutput: 2048,
+    pricing: {
+      cachedInput: 0,
+      input: 0,
+      output: 0,
+    },
+    type: 'chat',
+  },
+  {
+    contextWindowTokens: 2048 + 8192,
     displayName: 'Gemma 3n E4B',
     id: 'gemma-3n-e4b-it',
     maxOutput: 2048,
@@ -507,6 +497,38 @@ const googleChatModels: AIChatModelCard[] = [
   },
 ];
 
-export const allModels = [...googleChatModels];
+// Common parameters for Imagen models
+const imagenBaseParameters: ModelParamsSchema = {
+  aspectRatio: {
+    default: '1:1',
+    enum: ['1:1', '16:9', '9:16', '3:4', '4:3'],
+  },
+  prompt: { default: '' },
+};
+
+const googleImageModels: AIImageModelCard[] = [
+  {
+    description: 'Imagen 4th generation text-to-image model series',
+    displayName: 'Imagen4 Preview 06-06',
+    enabled: true,
+    id: 'imagen-4.0-generate-preview-06-06',
+    organization: 'Deepmind',
+    parameters: imagenBaseParameters,
+    releasedAt: '2024-06-06',
+    type: 'image',
+  },
+  {
+    description: 'Imagen 4th generation text-to-image model series Ultra version',
+    displayName: 'Imagen4 Ultra Preview 06-06',
+    enabled: true,
+    id: 'imagen-4.0-ultra-generate-preview-06-06',
+    organization: 'Deepmind',
+    parameters: imagenBaseParameters,
+    releasedAt: '2024-06-06',
+    type: 'image',
+  },
+];
+
+export const allModels = [...googleChatModels, ...googleImageModels];
 
 export default allModels;
