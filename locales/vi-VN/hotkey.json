@@ -7,6 +7,14 @@
     "desc": "Xóa tất cả tin nhắn và tệp đã tải lên trong cuộc trò chuyện hiện tại",
     "title": "Xóa tin nhắn cuộc trò chuyện"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Xoá tin nhắn cuối cùng và tạo lại",
+    "title": "Xoá và tạo lại"
+  },
+  "deleteLastMessage": {
+    "desc": "Xoá tin nhắn cuối cùng",
+    "title": "Xoá tin nhắn cuối cùng"
+  },
   "desktop": {
     "openSettings": {
       "desc": "Mở trang cài đặt ứng dụng",
@@ -20,6 +28,10 @@
   "editMessage": {
     "desc": "Vào chế độ chỉnh sửa bằng cách giữ phím Alt và nhấp đúp vào tin nhắn",
     "title": "Chỉnh sửa tin nhắn"
+  },
+  "navigateToChat": {
+    "desc": "Chuyển sang tab trò chuyện và bắt đầu cuộc trò chuyện ngẫu nhiên",
+    "title": "Chuyển sang cuộc trò chuyện mặc định"
   },
   "openChatSettings": {
     "desc": "Xem và chỉnh sửa cài đặt của cuộc trò chuyện hiện tại",

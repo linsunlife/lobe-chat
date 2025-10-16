@@ -7,6 +7,14 @@
     "desc": "Geçerli oturumun mesajlarını ve yüklenen dosyaları temizle",
     "title": "Oturum mesajlarını temizle"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Son mesajı sil ve yeniden oluştur",
+    "title": "Sil ve Yeniden Oluştur"
+  },
+  "deleteLastMessage": {
+    "desc": "Son mesajı sil",
+    "title": "Son Mesajı Sil"
+  },
   "desktop": {
     "openSettings": {
       "desc": "Uygulama ayarları sayfasını aç",
@@ -20,6 +28,10 @@
   "editMessage": {
     "desc": "Mesaja çift tıklayıp Alt tuşuna basarak düzenleme moduna geçin",
     "title": "Mesajı düzenle"
+  },
+  "navigateToChat": {
+    "desc": "Sohbet sekmesine geç ve rastgele sohbet et",
+    "title": "Varsayılan sohbete geç"
   },
   "openChatSettings": {
     "desc": "Mevcut oturumun ayarlarını görüntüle ve değiştir",

@@ -1,7 +1,4 @@
 // @vitest-environment node
-import { describe, expect, it, vi } from 'vitest';
-
-import { ClientSecretPayload } from '@/const/auth';
 import {
   LobeAnthropicAI,
   LobeAzureOpenAI,
@@ -17,19 +14,21 @@ import {
   LobeOpenRouterAI,
   LobePerplexityAI,
   LobeQwenAI,
-  LobeRuntimeAI,
+  LobeStepfunAI,
   LobeTogetherAI,
   LobeZeroOneAI,
   LobeZhipuAI,
-  ModelProvider,
-} from '@/libs/model-runtime';
-import { ModelRuntime } from '@/libs/model-runtime';
-import { LobeStepfunAI } from '@/libs/model-runtime/stepfun';
+  ModelRuntime,
+} from '@lobechat/model-runtime';
+import { LobeVertexAI } from '@lobechat/model-runtime/vertexai';
+import { ClientSecretPayload } from '@lobechat/types';
+import { ModelProvider } from 'model-bank';
+import { describe, expect, it, vi } from 'vitest';
 
 import { initModelRuntimeWithUserPayload } from './index';
 
 // 模拟依赖项
-vi.mock('@/config/llm', () => ({
+vi.mock('@/envs/llm', () => ({
   getLLMConfig: vi.fn(() => ({
     // 确保为每个provider提供必要的配置信息
     OPENAI_API_KEY: 'test-openai-key',
@@ -60,14 +59,17 @@ vi.mock('@/config/llm', () => ({
 
 /**
  * Test cases for function initModelRuntimeWithUserPayload
- * this method will use ModelRuntime from `@/libs/model-runtime`
+ * this method will use ModelRuntime from `@lobechat/model-runtime`
  * and method `getLlmOptionsFromPayload` to initialize runtime
  * with user payload. Test case below will test both the methods
  */
 describe('initModelRuntimeWithUserPayload method', () => {
   describe('should initialize with options correctly', () => {
     it('OpenAI provider: with apikey and endpoint', async () => {
-      const jwtPayload: ClientSecretPayload = { apiKey: 'user-openai-key', baseURL: 'user-endpoint' };
+      const jwtPayload: ClientSecretPayload = {
+        apiKey: 'user-openai-key',
+        baseURL: 'user-endpoint',
+      };
       const runtime = await initModelRuntimeWithUserPayload(ModelProvider.OpenAI, jwtPayload);
       expect(runtime).toBeInstanceOf(ModelRuntime);
       expect(runtime['_runtime']).toBeInstanceOf(LobeOpenAI);
@@ -81,6 +83,19 @@ describe('initModelRuntimeWithUserPayload method', () => {
         azureApiVersion: '2024-06-01',
       };
       const runtime = await initModelRuntimeWithUserPayload(ModelProvider.Azure, jwtPayload);
+      expect(runtime).toBeInstanceOf(ModelRuntime);
+      expect(runtime['_runtime']).toBeInstanceOf(LobeAzureOpenAI);
+      expect(runtime['_runtime'].baseURL).toBe(jwtPayload.baseURL);
+    });
+
+    it('Custom provider should use runtimeProvider to init', async () => {
+      const jwtPayload: ClientSecretPayload = {
+        apiKey: 'user-azure-key',
+        azureApiVersion: '2024-06-01',
+        baseURL: 'user-azure-endpoint',
+        runtimeProvider: ModelProvider.Azure,
+      };
+      const runtime = await initModelRuntimeWithUserPayload('custom-provider', jwtPayload);
       expect(runtime).toBeInstanceOf(ModelRuntime);
       expect(runtime['_runtime']).toBeInstanceOf(LobeAzureOpenAI);
       expect(runtime['_runtime'].baseURL).toBe(jwtPayload.baseURL);
@@ -112,6 +127,36 @@ describe('initModelRuntimeWithUserPayload method', () => {
       const runtime = await initModelRuntimeWithUserPayload(ModelProvider.Qwen, jwtPayload);
       expect(runtime).toBeInstanceOf(ModelRuntime);
       expect(runtime['_runtime']).toBeInstanceOf(LobeQwenAI);
+    });
+
+    it('Vertex AI provider: with service account json', async () => {
+      const credentials = {
+        client_email: 'vertex@test-project.iam.gserviceaccount.com',
+        private_key: '-----BEGIN PRIVATE KEY-----\nTEST\n-----END PRIVATE KEY-----\n',
+        project_id: 'test-project',
+        type: 'service_account',
+      };
+      const payload: ClientSecretPayload = { apiKey: JSON.stringify(credentials) };
+      const initSpy = vi
+        .spyOn(LobeVertexAI, 'initFromVertexAI')
+        .mockImplementation((options: any) => {
+          expect(options.project).toBe('test-project');
+          expect(options.googleAuthOptions?.credentials?.private_key).toContain('TEST');
+
+          return new LobeGoogleAI({
+            apiKey: 'avoid-error',
+            client: {} as any,
+            isVertexAi: true,
+          });
+        });
+
+      const runtime = await initModelRuntimeWithUserPayload(ModelProvider.VertexAI, payload);
+
+      expect(initSpy).toHaveBeenCalledTimes(1);
+      expect(runtime).toBeInstanceOf(ModelRuntime);
+      expect(runtime['_runtime']).toBeInstanceOf(LobeGoogleAI);
+
+      initSpy.mockRestore();
     });
 
     it('Bedrock AI provider: with apikey, awsAccessKeyId, awsSecretAccessKey, awsRegion', async () => {

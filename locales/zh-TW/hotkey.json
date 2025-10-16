@@ -7,6 +7,14 @@
     "desc": "清空當前會話的消息和上傳的檔案",
     "title": "清空會話消息"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "刪除最後一則訊息並重新產生",
+    "title": "刪除並重新產生"
+  },
+  "deleteLastMessage": {
+    "desc": "刪除最後一則訊息",
+    "title": "刪除最後一則訊息"
+  },
   "desktop": {
     "openSettings": {
       "desc": "打開應用設定頁面",
@@ -20,6 +28,10 @@
   "editMessage": {
     "desc": "通過按住 Alt 並雙擊消息進入編輯模式",
     "title": "編輯消息"
+  },
+  "navigateToChat": {
+    "desc": "切換至會話標籤並進入隨便聊聊",
+    "title": "切換至預設會話"
   },
   "openChatSettings": {
     "desc": "查看和修改當前會話的設定",

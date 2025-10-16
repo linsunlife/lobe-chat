@@ -7,6 +7,14 @@
     "desc": "現在のセッションのメッセージとアップロードされたファイルをクリアする",
     "title": "セッションメッセージをクリア"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "最後のメッセージを削除して再生成する",
+    "title": "削除して再生成"
+  },
+  "deleteLastMessage": {
+    "desc": "最後のメッセージを削除する",
+    "title": "最後のメッセージを削除"
+  },
   "desktop": {
     "openSettings": {
       "desc": "アプリ設定ページを開く",
@@ -20,6 +28,10 @@
   "editMessage": {
     "desc": "Altキーを押しながらメッセージをダブルクリックして編集モードに入ります",
     "title": "メッセージを編集"
+  },
+  "navigateToChat": {
+    "desc": "チャットタブに切り替えて気軽に会話を始める",
+    "title": "デフォルトの会話に切り替え"
   },
   "openChatSettings": {
     "desc": "現在の会話の設定を表示および変更する",

@@ -1,15 +1,16 @@
+import type {
+  ChatModelCard,
+  GlobalLLMProviderKey,
+  ModelProviderCard,
+  UserKeyVaults,
+  UserModelProviderConfig,
+} from '@lobechat/types';
 import { produce } from 'immer';
+import { ModelProvider } from 'model-bank';
 import useSWR, { SWRResponse } from 'swr';
 import type { StateCreator } from 'zustand/vanilla';
 
-import { ModelProvider } from '@/libs/model-runtime';
-import { UserStore } from '@/store/user';
-import type { ChatModelCard, ModelProviderCard } from '@/types/llm';
-import type {
-  GlobalLLMProviderKey,
-  UserKeyVaults,
-  UserModelProviderConfig,
-} from '@/types/user/settings';
+import type { UserStore } from '@/store/user';
 
 import { settingsSelectors } from '../settings/selectors';
 import { CustomModelCardDispatch, customModelCardsReducer } from './reducers/customModelCard';
