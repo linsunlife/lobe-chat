@@ -1,6 +1,41 @@
 [
   {
     "children": {
+      "improvements": ["Refactor upload router into lambda and decide to remove it in V2."]
+    },
+    "date": "2025-10-18",
+    "version": "1.138.5"
+  },
+  {
+    "children": {
+      "fixes": ["Fix response API tools calling issue."]
+    },
+    "date": "2025-10-18",
+    "version": "1.138.4"
+  },
+  {
+    "children": {
+      "fixes": ["Fix topic fetch not correct in custom agent."]
+    },
+    "date": "2025-10-18",
+    "version": "1.138.3"
+  },
+  {
+    "children": {
+      "improvements": ["Improve welcome message."]
+    },
+    "date": "2025-10-16",
+    "version": "1.138.2"
+  },
+  {
+    "children": {
+      "fixes": ["Automatic topic creation switch does not work."]
+    },
+    "date": "2025-10-16",
+    "version": "1.138.1"
+  },
+  {
+    "children": {
       "features": ["Support Group Chat, Mention, and Multi-Agent Orchestration with feature flag."]
     },
     "date": "2025-10-16",
